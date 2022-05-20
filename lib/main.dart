@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,8 +47,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> startRecord({required String fileName}) async {
     try {
+      //Directory tempDir = await getApplicationDocumentsDirectory();
+      //String tempPath = tempDir.path;
       var startResponse = await screenRecorder?.startRecordScreen(
         fileName: "Eren",
+        dirPathToSave: "/storage/emulated/0/DCIM/Camera/",
         audioEnable: false,
       );
       setState(() {
