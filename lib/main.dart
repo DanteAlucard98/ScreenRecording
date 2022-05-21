@@ -35,7 +35,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   EdScreenRecorder? screenRecorder;
   Map<String, dynamic>? _response;
   bool inProgress = false;
@@ -44,6 +44,26 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     screenRecorder = EdScreenRecorder();
+    WidgetsBinding.instance?.addObserver(this);
+  }
+
+  @override
+  void disose() {
+    WidgetsBinding.instance?.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.detached) return;
+
+    final isBackground = state == AppLifecycleState.paused;
+
+    if (isBackground) {
+      stopRecord();
+    }
   }
 
   Future<void> startRecord({required String fileName}) async {
